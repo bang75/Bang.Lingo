@@ -17,7 +17,9 @@
 
 	<BaseModels>
 		<TestModels>
-			<TestModel1>
+			<Test1Model>
+				<DisplayName>Testmodel 1</DisplayName>
+				
 				<Fields>
 					<Id>
 						<DisplayName>ID-nummer</DisplayName>
@@ -29,7 +31,57 @@
 						<Description>Objektets namn.</Description>
 					</Name>
 				</Fields>
-			</TestModel1>					
+			</Test1Model>					
 		</TestModels>
 	</BaseModels>
+
+	<Models>
+		<Test2>
+			<DisplayName>Testmodel 2</DisplayName>
+
+			<Fields>
+				<Id>
+					<DisplayName>ID-nummer</DisplayName>
+					<Description>Identifierar objektet.</Description>
+				</Id>
+
+				<Name>
+					<DisplayName>Namn</DisplayName>
+					<Description>Objektets namn.</Description>
+				</Name>
+
+				<SpecialName>
+					<DisplayName>Specialnamn</DisplayName>
+					<Description>Objektets specialnamn.</Description>
+				</SpecialName>
+			</Fields>
+		</Test2>
+	</Models>
+
+	<Fields>
+		<Email>
+			<DisplayName>Epostadress</DisplayName>
+			<Description>Objektets epostadress.</Description>
+		</Email>
+	</Fields>
+	
+	<Enums>
+		<Test1Enum>
+			<DisplayName>Testalt. 1</DisplayName>
+
+			<Values>
+				<Undefined>Odefinierat</Undefined>
+			</Values>
+		</Test1Enum>
+	</Enums>
+
+	<AltEnums>
+		<Test2Enum>
+			<DisplayName>Testalt. 2</DisplayName>
+
+			<Values>
+				<Undefined>Odefinierat</Undefined>
+			</Values>
+		</Test2Enum>
+	</AltEnums>
 </Translations>

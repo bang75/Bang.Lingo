@@ -3,6 +3,7 @@
 using System.Collections.Immutable;
 
 namespace Bang.Lingo;
+
 public class Lingo
 {
 	// Events
@@ -60,20 +61,25 @@ public class Lingo
 		return prefix;
 	}
 
-	public TranslationDictionary GetDictionary(String language)
+	public TranslationDictionary GetDictionary(String? language = null)
 	{
 		lock(this.Dictionaries)
 		{
-			if(!this.Dictionaries.TryGetValue(language, out var dictionary))
+			if(language.IsNullOrWhiteSpace())
 			{
-				this.Dictionaries = this.Dictionaries.Add(language, dictionary = new TranslationDictionary(language));
+				language = Thread.CurrentThread.CurrentUICulture.Name;
+			}
+
+			if(!this.Dictionaries.TryGetValue(language!, out var dictionary))
+			{
+				this.Dictionaries = this.Dictionaries.Add(language!, dictionary = new TranslationDictionary(language!));
 			}
 
 			return dictionary;
 		}
 	}
 
-	public Translator GetTranslator(String language, String? prefix = null)
+	public Translator GetTranslator(String? language = null, String? prefix = null)
 	{
 		lock(this.Dictionaries)
 		{

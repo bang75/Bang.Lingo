@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bang.Lingo", "Lingo\Bang.Li
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bang.Extensions", "..\..\Bang.Extensions\Src\Bang.Extensions.csproj", "{046D1243-CE1E-4FD1-96AD-ABB90EDB10C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{0370F5E8-9801-4CA5-A95B-D27346C82931}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoTests", "Tests\LingoTests.csproj", "{0370F5E8-9801-4CA5-A95B-D27346C82931}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -9,5 +9,11 @@ public class LingoOptions
 	public Dictionary<String, Func<String, String, String>> Parameters { get; set; } = new Dictionary<String, Func<String, String, String>>(StringComparer.OrdinalIgnoreCase);
 
 	public Dictionary<Type, String> BasePrefixes { get; set; } = new Dictionary<Type, String>();
-	
+
+
+	public LingoOptions()
+	{
+		this.BasePrefixes.Add(typeof(Enum), "Enums");
+	}
+
 }

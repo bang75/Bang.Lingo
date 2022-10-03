@@ -14,4 +14,20 @@
 	<Unique>
 		<Text1>EN Text</Text1>
 	</Unique>
+
+	<Test1Model>
+		<DisplayName>Test Model 1</DisplayName>
+
+		<Fields>
+			<Id>
+				<DisplayName>ID Number</DisplayName>
+				<Description>Identifies the object.</Description>
+			</Id>
+
+			<Name>
+				<DisplayName>The Name</DisplayName>
+				<Description>Name of the object.</Description>
+			</Name>
+		</Fields>
+	</Test1Model>
 </Translations>
