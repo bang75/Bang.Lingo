@@ -15,7 +15,9 @@ public class Translator
 
 
 	// Indexer
-	public String this[String key] => this.Translate(key) ?? "";
+	public String this[String key] => this.Translate(key)!;
+
+	public String this[String key, params Object?[] args] => this.TranslateFormat(key, args)!;
 
 
 	// Constructors
@@ -42,21 +44,21 @@ public class Translator
 	}
 
 
-	public String? Translate(String? key, Boolean nullIfNotExists = false, Boolean asHtml = true) => this.Translate(key, false, nullIfNotExists, asHtml);
+	public String? Translate(String? key, Boolean nullIfNotExists = false, Boolean suppressHtml = false) => this.Translate(key, false, nullIfNotExists, suppressHtml);
 
-	public HtmlString? HtmlTranslate(String? key, Boolean nullIfNotExists = false) => new HtmlString(this.Translate(key, false, nullIfNotExists, asHtml: true));
-
-
-	public String? TranslateIfHashed(String? key, Boolean nullIfNotExists = false, Boolean asHtml = true) => this.Translate(key, true, nullIfNotExists, asHtml);
+	public HtmlString? HtmlTranslate(String? key, Boolean nullIfNotExists = false) => new HtmlString(this.Translate(key, false, nullIfNotExists, suppressHtml: false));
 
 
-	public String? TranslateFormat(String? key, Object?[] args, Boolean nullIfNotExists, Boolean asHtml)
+	public String? TranslateIfHashed(String? key, Boolean nullIfNotExists = false, Boolean suppressHtml = false) => this.Translate(key, true, nullIfNotExists, suppressHtml);
+
+
+	public String? TranslateFormat(String? key, Object?[] args, Boolean nullIfNotExists, Boolean suppressHtml)
 	{
 		if(this.ContainsKey(key))
 		{
 			var translatedArgs = args.Select(a => a != null && a is String argKey ? this.TranslateIfHashed(argKey) : a).ToArray<Object?>();
 
-			return String.Format(this.Translate(key, false, nullIfNotExists, asHtml) ?? String.Empty, translatedArgs);
+			return String.Format(this.Translate(key, false, nullIfNotExists, suppressHtml) ?? String.Empty, translatedArgs);
 		}
 		else
 		{
@@ -64,9 +66,9 @@ public class Translator
 		}
 	}
 
-	public String? TranslateFormat(String? key, params Object?[] args) => this.TranslateFormat(key, args, asHtml: false, nullIfNotExists: false);
+	public String? TranslateFormat(String? key, params Object?[] args) => this.TranslateFormat(key, args, suppressHtml: false, nullIfNotExists: false);
 	
-	public HtmlString HtmlTranslateFormat(String? key, Object?[] args, Boolean nullIfNotExists = false) => new HtmlString(this.TranslateFormat(key, args, nullIfNotExists, asHtml: true));
+	public HtmlString HtmlTranslateFormat(String? key, Object?[] args, Boolean nullIfNotExists = false) => new HtmlString(this.TranslateFormat(key, args, nullIfNotExists, suppressHtml: false));
 
 	public HtmlString HtmlTranslateFormat(String? key, params Object?[] args) => this.HtmlTranslateFormat(key, args, nullIfNotExists: false);
 
@@ -109,7 +111,7 @@ public class Translator
 	}
 
 
-	protected String? Translate(String? key, Boolean onlyIfHashed, Boolean nullIfNotExists, Boolean asHtml)
+	protected String? Translate(String? key, Boolean onlyIfHashed, Boolean nullIfNotExists, Boolean suppressHtml)
 	{
 		var result = key;
 
@@ -130,7 +132,7 @@ public class Translator
 
 				if(entry != null)
 				{
-					result = (asHtml ? entry.HtmlValue : null) ?? entry.Value;
+					result = (!suppressHtml ? entry.HtmlValue : null) ?? entry.Value;
 
 					if(this.Lingo.Parameters != null && result?.Contains('{') == true)
 					{

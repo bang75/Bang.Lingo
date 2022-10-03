@@ -96,7 +96,7 @@ public class DisplayMetadataProvider : IDisplayMetadataProvider
 				prefix = $"{containerPrefix}{propertyPrefix}";
 			}
 
-			var name = context.Key.Name.TrimToNull(context.Key.PropertyInfo?.Name ?? "");
+			var name = context.Key.Name.TrimToNull(context.Key.PropertyInfo?.Name ?? "")!;
 
 			var displayName = context.DisplayMetadata.DisplayName;
 			context.DisplayMetadata.DisplayName = () => this.GetMetaString("DisplayName", prefix, displayName?.Invoke() ?? "", name);
