@@ -1,0 +1,165 @@
+﻿#nullable enable
+
+using Microsoft.AspNetCore.Html;
+
+namespace Bang.Lingo;
+
+public class Translator
+{
+	// Properties
+	public TranslationDictionary Dictionary { get; init; }
+
+	public String Language => this.Dictionary.Language;
+
+	public String? Prefix { get; set; }
+
+
+	// Indexer
+	public String this[String key] => this.Translate(key) ?? "";
+
+
+	// Constructors
+	internal Translator(Lingo lingo, TranslationDictionary dictionary, String? prefix = null)
+	{
+		this.Lingo = lingo;
+		this.Dictionary = dictionary;
+		this.Prefix = prefix;
+	}
+
+	internal Translator(Translator translator, String? prefix = null) : this(translator.Lingo, translator.Dictionary, prefix)
+	{
+ 	}
+
+
+	// Methods
+	public Boolean ContainsKey(String? key)
+	{
+		key = key.UnPrefix("#");
+
+		var fullKey = this.GetFullKey(key);
+
+		return fullKey != null ? this.Dictionary.ContainsKey(fullKey) : false;
+	}
+
+
+	public String? Translate(String? key, Boolean nullIfNotExists = false, Boolean asHtml = true) => this.Translate(key, false, nullIfNotExists, asHtml);
+
+	public HtmlString? HtmlTranslate(String? key, Boolean nullIfNotExists = false) => new HtmlString(this.Translate(key, false, nullIfNotExists, asHtml: true));
+
+
+	public String? TranslateIfHashed(String? key, Boolean nullIfNotExists = false, Boolean asHtml = true) => this.Translate(key, true, nullIfNotExists, asHtml);
+
+
+	public String? TranslateFormat(String? key, Object?[] args, Boolean nullIfNotExists, Boolean asHtml)
+	{
+		if(this.ContainsKey(key))
+		{
+			var translatedArgs = args.Select(a => a != null && a is String argKey ? this.TranslateIfHashed(argKey) : a).ToArray<Object?>();
+
+			return String.Format(this.Translate(key, false, nullIfNotExists, asHtml) ?? String.Empty, translatedArgs);
+		}
+		else
+		{
+			return this.Translate(key, nullIfNotExists);
+		}
+	}
+
+	public String? TranslateFormat(String? key, params Object?[] args) => this.TranslateFormat(key, args, asHtml: false, nullIfNotExists: false);
+	
+	public HtmlString HtmlTranslateFormat(String? key, Object?[] args, Boolean nullIfNotExists = false) => new HtmlString(this.TranslateFormat(key, args, nullIfNotExists, asHtml: true));
+
+	public HtmlString HtmlTranslateFormat(String? key, params Object?[] args) => this.HtmlTranslateFormat(key, args, nullIfNotExists: false);
+
+
+
+	#region Protected Area
+
+	// Properties
+	protected readonly Lingo Lingo;
+
+
+	// Methods
+	protected String? GetFullKey(String? key)
+	{
+		if(!this.Prefix.IsNullOrWhiteSpace())
+		{
+			var hashed = key?.StartsWith("#") == true;
+
+			if(hashed)
+			{
+				key = key![1..];
+			}
+
+			if(key?.StartsWith('.') == true)
+			{
+				if(!this.Prefix.IsNullOrWhiteSpace())
+				{
+					key = this.Prefix + key;
+				}
+				else
+				{
+					key = key.TrimStart('.');
+				}
+			}
+
+			key = (hashed ? "#" : null) + key;
+		}
+
+		return key;
+	}
+
+
+	protected String? Translate(String? key, Boolean onlyIfHashed, Boolean nullIfNotExists, Boolean asHtml)
+	{
+		var result = key;
+
+		var fullKey = this.GetFullKey(key);
+
+		var hashed = fullKey?.StartsWith("#") == true;
+
+		if(hashed)
+		{
+			fullKey = fullKey![1..];
+		}
+
+		if(!fullKey.IsNullOrWhiteSpace())
+		{
+			if(hashed || !onlyIfHashed)
+			{
+				var entry = this.Dictionary.GetEntry(fullKey!);
+
+				if(entry != null)
+				{
+					result = (asHtml ? entry.HtmlValue : null) ?? entry.Value;
+
+					if(this.Lingo.Parameters != null && result?.Contains('{') == true)
+					{
+						foreach(var keyVal in this.Lingo.Parameters)
+						{
+							if(result!.Contains($"{{{keyVal.Key}}}", StringComparison.OrdinalIgnoreCase))
+							{
+								result = result.Replace($"{{{keyVal.Key}}}", keyVal.Value(this.Language, keyVal.Key), StringComparison.OrdinalIgnoreCase);
+							}
+						}
+					}
+				}
+				else if(nullIfNotExists)
+				{
+					result = null;
+				}
+				else
+				{
+					result = this.Lingo.MissingItemText
+						.Replace("{language}", this.Language, StringComparison.OrdinalIgnoreCase)
+						.Replace("{key}", fullKey, StringComparison.OrdinalIgnoreCase);
+				}
+			}
+		}
+
+		return result;
+	}
+
+
+	#endregion
+
+}

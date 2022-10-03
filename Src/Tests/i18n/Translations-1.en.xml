@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<Translations Language="en">
+	<Text1>Test 1</Text1>
+	<Text2>Test 2</Text2>
+
+	<Parameter1>{P1}</Parameter1>
+
+	<Globals>
+		<Text1>English text 1</Text1>
+		<Text2>English text 2</Text2>
+	</Globals>
+
+	<Unique>
+		<Text1>EN Text</Text1>
+	</Unique>
+</Translations>

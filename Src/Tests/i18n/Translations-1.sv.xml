@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<Translations Language="sv">
+	<Text1>Test 1</Text1>
+	<Text2>Test 2</Text2>
+
+	<Parameter1>{P1}</Parameter1>
+
+	<Globals>
+		<Text1>Svensktext 1</Text1>
+		<Text2>Svensktext 2</Text2>
+	</Globals>
+
+	<Unik>
+		<Text1>SV Text</Text1>
+	</Unik>
+
+	<BaseModels>
+		<TestModels>
+			<TestModel1>
+				<Fields>
+					<Id>
+						<DisplayName>ID-nummer</DisplayName>
+						<Description>Identifierar objektet.</Description>
+					</Id>
+
+					<Name>
+						<DisplayName>Namn</DisplayName>
+						<Description>Objektets namn.</Description>
+					</Name>
+				</Fields>
+			</TestModel1>					
+		</TestModels>
+	</BaseModels>
+</Translations>
