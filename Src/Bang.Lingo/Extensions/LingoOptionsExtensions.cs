@@ -5,11 +5,11 @@ using System.Reflection;
 
 namespace Bang.Lingo.Extensions;
 
-public static class LingoExtensions
+public static class LingoOptionsExtensions
 {
-	public static void AddXml(this Lingo interpreterProvider, String path, Boolean throwIfNotExists = true)
+	public static void AddTranslationXml(this LingoOptions options, String path, Boolean throwIfNotExists = true)
 	{
-		interpreterProvider.LoadTranslations += interpreterProvider =>
+		options.LoadTranslations += lingo =>
 		{
 			var physicalPath = path;
 
@@ -17,16 +17,16 @@ public static class LingoExtensions
 			{
 				foreach(var file in Directory.GetFiles(physicalPath, "*.xml", SearchOption.AllDirectories))
 				{
-					using(var fileStream = File.OpenRead(file))
+					using var fileStream = File.OpenRead(file);
 
-					LoadXml(interpreterProvider, fileStream);
+					LoadXml(lingo, fileStream);
 				}
 			}
 			else if(File.Exists(physicalPath))
 			{
-					using(var fileStream = File.OpenRead(path))
+				using var fileStream = File.OpenRead(path);
 
-					LoadXml(interpreterProvider, fileStream);
+				LoadXml(lingo, fileStream);
 			}
 			else if(throwIfNotExists)
 			{
@@ -35,12 +35,10 @@ public static class LingoExtensions
 		};
 	}
 
-	public static void AddXml(this Lingo interpreterProvider, Assembly assembly, String path, Boolean throwIfNotExists = true)
+	public static void AddTranslationXml(this LingoOptions options, Assembly assembly, String path, Boolean throwIfNotExists = true)
 	{
-		interpreterProvider.LoadTranslations += interpreterProvider =>
+		options.LoadTranslations += lingo =>
 		{
-			//path = path.UnSuffix('/');
-
 			var resCount = 0;
 			var resPattern = path.Replace("/", ".");
 			var strComp = StringComparison.OrdinalIgnoreCase;
@@ -50,15 +48,20 @@ public static class LingoExtensions
 				resPattern = $"{assembly.GetName().Name}{resPattern}";
 			}
 
+			if(!resPattern.EndsWith(".xml", strComp))
+			{
+				resPattern = resPattern.Suffix(".")!;
+			}
+
 			foreach(var resId in assembly.GetManifestResourceNames()
-				.Where(r => r.Equals(resPattern, strComp) || (r.StartsWith(resPattern + ".", strComp) && r.EndsWith(".xml", strComp))))
+				.Where(r => r.StartsWith(resPattern, strComp) && r.EndsWith(".xml", strComp)))
 			{
 				var stream = assembly.GetManifestResourceStream(resId);
 
 				if(stream != null)
 				{
 					resCount++;
-					LoadXml(interpreterProvider, stream);
+					LoadXml(lingo, stream);
 				}
 			}
 
@@ -72,7 +75,7 @@ public static class LingoExtensions
 
 
 	#region Protected Area
-	
+
 	private static void LoadXml(Lingo lingo, Stream stream)
 	{
 		var doc = new XmlDocument();
@@ -110,7 +113,6 @@ public static class LingoExtensions
 				dictionary.Add(key, String.Empty);
 			}
 		}
-
 
 		foreach(XmlNode node in doc.GetElementsByTagName("Translations"))
 		{

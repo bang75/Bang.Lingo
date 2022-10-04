@@ -9,15 +9,30 @@ public class BasicTests
     [TestMethod]
     public void InitMissingXmlTest()
     {
-        var lingo = new Lingo();
+		var options = new LingoOptions();
 
-        lingo.AddXml("i18n/Translations-1.sv.xml", throwIfNotExists: true);
-        lingo.AddXml("i18n/Translations-1.xx.xml", throwIfNotExists: true);
+		options.AddTranslationXml("i18n/Translations-1.sv.xml", throwIfNotExists: true);
+		options.AddTranslationXml("i18n/Translations-1.xx.xml", throwIfNotExists: true);
+        
+		var lingo = new Lingo(options);
 
         Assert.ThrowsException<ArgumentException>(() => lingo.Load());
     }
 
-    [TestMethod]
+	public void InitWithMissingFolderTest()
+	{
+		var options = new LingoOptions();
+
+		options.AddTranslationXml("i18n");
+		options.AddTranslationXml("translations");
+
+		var lingo = new Lingo(options);
+
+		Assert.ThrowsException<ArgumentException>(() => lingo.Load());
+	}
+
+
+	[TestMethod]
     public void InitWithOptionsTest()
     {
         var options = new LingoOptions()
@@ -25,12 +40,12 @@ public class BasicTests
             MissingItemText = "MissingText: {language}/{key}"
         };
 
-        options.Parameters.Add("P1", (language, key) => "Param1");
+        options.AddParameter("P1", (language, key) => "Param1");
+
+		options.AddTranslationXml("i18n/Translations-1.sv.xml");
+		options.AddTranslationXml("i18n/Translations-1.en.xml");
 
         var lingo = new Lingo(options);
-
-        lingo.AddXml("i18n/Translations-1.sv.xml");
-        lingo.AddXml("i18n/Translations-1.en.xml");
 
         lingo.Load();
 
@@ -42,17 +57,94 @@ public class BasicTests
         Assert.AreEqual("Param1", i18n["Parameter1"]);
     }
 
-    [TestMethod]
+
+	[TestMethod]
+	public void InitWithFolderTest()
+	{
+		var options = new LingoOptions();
+
+		options.AddTranslationXml("i18n");
+
+		var lingo = new Lingo(options);
+
+		lingo.Load();
+
+
+		var dictSv = lingo.GetDictionary("sv");
+		var dictEn = lingo.GetDictionary("en");
+
+		Assert.IsTrue(dictSv.NoOfTranslations > 2);
+		Assert.AreEqual(2, dictSv.GetTranslations("Globals").Count);
+
+		Assert.IsTrue(dictEn.NoOfTranslations > 2);
+		Assert.AreEqual(2, dictEn.GetTranslations("Globals").Count);
+
+		Assert.AreEqual(0, lingo.GetDictionary("xx").NoOfTranslations);
+	}
+
+
+	[TestMethod]
+	public void InitWithEmbeddedTest()
+	{
+		var options = new LingoOptions();
+
+		options.AddTranslationXml(this.GetType().Assembly, "/i18nEmbedded/Translations.xml");
+
+		var lingo = new Lingo(options);
+
+		lingo.Load();
+
+
+		var dictSv = lingo.GetDictionary("sv");
+
+		Assert.IsTrue(dictSv.NoOfTranslations > 2);
+		Assert.AreEqual(2, dictSv.GetTranslations("Globals").Count);
+	}
+
+	[TestMethod]
+	public void InitWithEmbeddedFolderTest()
+	{
+		var options = new LingoOptions();
+
+		options.AddTranslationXml(this.GetType().Assembly, "/i18nEmbedded");
+
+		var lingo = new Lingo(options);
+
+		lingo.Load();
+
+
+		var dictSv = lingo.GetDictionary("sv");
+
+		Assert.IsTrue(dictSv.NoOfTranslations > 2);
+		Assert.AreEqual(2, dictSv.GetTranslations("Globals").Count);
+	}
+
+	[TestMethod]
+	public void InitWithMissingEmbeddedTest()
+	{
+		var options = new LingoOptions();
+
+		options.AddTranslationXml(this.GetType().Assembly, "/i18n");
+
+		var lingo = new Lingo(options);
+
+		Assert.ThrowsException<ArgumentException>(() => lingo.Load());
+	}
+
+
+	[TestMethod]
     public void InitSuccessfullyTest()
     {
-        var lingo = new Lingo();
+		var options = new LingoOptions();
 
-        lingo.AddXml("i18n/Translations-1.sv.xml");
-        lingo.AddXml("i18n/Translations-1.en.xml");
-        lingo.AddXml("i18n/Translations-2.sv.xml", throwIfNotExists: true);
-        lingo.AddXml("i18n/Translations-2.en.xml", throwIfNotExists: true);
+		options.AddTranslationXml("i18n/Translations-1.sv.xml");
+		options.AddTranslationXml("i18n/Translations-1.en.xml");
+		options.AddTranslationXml("i18n/Translations-2.sv.xml", throwIfNotExists: true);
+		options.AddTranslationXml("i18n/Translations-2.en.xml", throwIfNotExists: true);
 
-        lingo.AddXml("i18n/Translations-1.xx.xml", throwIfNotExists: false);
+		options.AddTranslationXml("i18n/Translations-1.xx.xml", throwIfNotExists: false);
+
+		var lingo = new Lingo(options);
 
         lingo.Load();
 
@@ -60,10 +152,10 @@ public class BasicTests
         var dictSv = lingo.GetDictionary("sv");
         var dictEn = lingo.GetDictionary("en");
 
-        Assert.IsTrue(dictSv.NoOfTranslations > 0);
+        Assert.IsTrue(dictSv.NoOfTranslations > 2);
         Assert.AreEqual(2, dictSv.GetTranslations("Globals").Count);
 
-        Assert.IsTrue(dictEn.NoOfTranslations > 0);
+        Assert.IsTrue(dictEn.NoOfTranslations > 2);
         Assert.AreEqual(2, dictEn.GetTranslations("Globals").Count);
 
         Assert.AreEqual(0, lingo.GetDictionary("xx").NoOfTranslations);
@@ -80,4 +172,5 @@ public class BasicTests
         Assert.IsNull(i18nEn.Translate("Unik.Text1", nullIfNotExists: true));
         Assert.IsNotNull(i18nEn.Translate("Unique.Text1", nullIfNotExists: true));
     }
+
 }

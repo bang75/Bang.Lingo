@@ -15,12 +15,14 @@ public partial class MetadataTests
 {
 	public Lingo CreateLingo(LingoOptions? options = null)
 	{
-		var lingo = new Lingo(options);
+		options = options ?? new LingoOptions();
 
-		lingo.AddXml("i18n/Translations-1.sv.xml");
-		lingo.AddXml("i18n/Translations-1.en.xml");
-		lingo.AddXml("i18n/Translations-2.sv.xml");
-		lingo.AddXml("i18n/Translations-2.en.xml");
+		options.AddTranslationXml("i18n/Translations-1.sv.xml");
+		options.AddTranslationXml("i18n/Translations-1.en.xml");
+		options.AddTranslationXml("i18n/Translations-2.sv.xml");
+		options.AddTranslationXml("i18n/Translations-2.en.xml");
+
+		var lingo = new Lingo(options);
 
 		lingo.Load();
 

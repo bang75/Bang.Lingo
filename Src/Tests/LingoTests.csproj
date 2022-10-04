@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,6 +7,14 @@
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="i18nEmbedded\Translations.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="i18nEmbedded\Translations.xml" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
@@ -18,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Lingo\Bang.Lingo.csproj" />
+    <ProjectReference Include="..\Bang.Lingo\Bang.Lingo.csproj" />
   </ItemGroup>
 
   <ItemGroup>

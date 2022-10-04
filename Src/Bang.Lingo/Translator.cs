@@ -30,7 +30,7 @@ public class Translator
 
 	internal Translator(Translator translator, String? prefix = null) : this(translator.Lingo, translator.Dictionary, prefix)
 	{
- 	}
+	}
 
 
 	// Methods
@@ -67,7 +67,7 @@ public class Translator
 	}
 
 	public String? TranslateFormat(String? key, params Object?[] args) => this.TranslateFormat(key, args, suppressHtml: false, nullIfNotExists: false);
-	
+
 	public HtmlString HtmlTranslateFormat(String? key, Object?[] args, Boolean nullIfNotExists = false) => new HtmlString(this.TranslateFormat(key, args, nullIfNotExists, suppressHtml: false));
 
 	public HtmlString HtmlTranslateFormat(String? key, params Object?[] args) => this.HtmlTranslateFormat(key, args, nullIfNotExists: false);
@@ -132,28 +132,11 @@ public class Translator
 
 				if(entry != null)
 				{
-					result = (!suppressHtml ? entry.HtmlValue : null) ?? entry.Value;
-
-					if(this.Lingo.Parameters != null && result?.Contains('{') == true)
-					{
-						foreach(var keyVal in this.Lingo.Parameters)
-						{
-							if(result!.Contains($"{{{keyVal.Key}}}", StringComparison.OrdinalIgnoreCase))
-							{
-								result = result.Replace($"{{{keyVal.Key}}}", keyVal.Value(this.Language, keyVal.Key), StringComparison.OrdinalIgnoreCase);
-							}
-						}
-					}
-				}
-				else if(nullIfNotExists)
-				{
-					result = null;
+					result = this.Lingo.ParseParams((!suppressHtml ? entry.HtmlValue : null) ?? entry.Value, this.Language);
 				}
 				else
 				{
-					result = this.Lingo.MissingItemText
-						.Replace("{language}", this.Language, StringComparison.OrdinalIgnoreCase)
-						.Replace("{key}", fullKey, StringComparison.OrdinalIgnoreCase);
+					result = nullIfNotExists ? null : this.Lingo.GetMissingText(this.Language, fullKey);
 				}
 			}
 		}
