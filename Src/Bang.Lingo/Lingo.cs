@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
 using System.Collections.Immutable;
@@ -84,6 +85,13 @@ public class Lingo
 		}
 	}
 
+	public Translator GetTranslator(HttpContext? httpContext, String? language = null)
+	{
+		var prefix = httpContext?.Items["Lingo.Prefix"] as String;
+
+		return this.GetTranslator(language, prefix);
+	}
+
 	public String? ParseParams(String? text, String language)
 	{
 		if(this.Parameters != null && text?.Contains('{') == true)
@@ -124,5 +132,4 @@ public class Lingo
 	protected ImmutableDictionary<String, TranslationDictionary> Dictionaries = ImmutableDictionary<String, TranslationDictionary>.Empty.WithComparers(StringComparer.OrdinalIgnoreCase);
 
 	#endregion
-
 }

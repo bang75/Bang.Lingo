@@ -2,11 +2,12 @@
 
 using System.Reflection;
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Bang.Lingo;
+
 public class LingoFilter : IAsyncActionFilter, IAsyncPageFilter
 {
 	// Constructors
@@ -21,9 +22,13 @@ public class LingoFilter : IAsyncActionFilter, IAsyncPageFilter
 		if(context.Controller is Controller controller)
 		{
 			var actionDescriptor = (ControllerActionDescriptor)context.ActionDescriptor;
-			var lingoAttr = actionDescriptor?.MethodInfo.GetCustomAttribute<LingoPrefixAttribute>(true) ?? controller.GetType().GetCustomAttribute<LingoPrefixAttribute>(true);
+			var lingoAttr = actionDescriptor?.MethodInfo.GetCustomAttribute<LingoPrefixAttribute>(true)
+				?? controller.GetType().GetCustomAttribute<LingoPrefixAttribute>(true);
 
-			context.HttpContext.Items["Lingo.Prefix"] = lingoAttr?.Prefix;
+			if(lingoAttr != null)
+			{
+				context.HttpContext.Items["Lingo.Prefix"] = lingoAttr?.Prefix;
+			}
 		}
 
 		await next();
