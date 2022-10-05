@@ -4,7 +4,9 @@ namespace Bang.Lingo;
 
 public class LingoOptions
 {
-	public Boolean Debug { get; set; } = true;
+	public Boolean Debug { get; set; }
+
+	public Boolean MapEndPoints { get; set; } = true;
 
 	public String FieldsPrefix { get; set; } = "Fields";
 
