@@ -30,7 +30,7 @@ public class DisplayMetadataProvider : IDisplayMetadataProvider
 
 				if(typePrefix.IsNullOrWhiteSpace())
 				{
-					typePrefix = this.Lingo.GetBasePrefix(context.Key.ModelType).Suffix(".") + context.Key.ModelType.Name;
+					typePrefix = this.Lingo.GetBasePrefix(context.Key.ModelType, context.Key.ModelType.Name);
 				}
 
 				if(context.Key.ModelType.IsEnum)
@@ -48,8 +48,8 @@ public class DisplayMetadataProvider : IDisplayMetadataProvider
 						var value = ((Enum)field.GetValue(obj: null)!).ToString("d");
 
 						var enumDisplayName = GetDisplayName(field);
-							
-						var enumGroupAndName = new EnumGroupAndName(groupName, () => this.GetMetaString("", $"{typePrefix}.Values.{field.Name}", enumDisplayName, field.Name));
+
+						var enumGroupAndName = new EnumGroupAndName(groupName, () => this.GetMetaString("", $"{typePrefix.Suffix(".")}Values.{field.Name}", enumDisplayName, field.Name));
 
 						groupedDisplayNamesAndValues.Add(new KeyValuePair<EnumGroupAndName, String>(enumGroupAndName, value));
 						namesAndValues.Add(field.Name, value);
@@ -85,22 +85,22 @@ public class DisplayMetadataProvider : IDisplayMetadataProvider
 			{
 				if(containerPrefix.IsNullOrWhiteSpace() && context.Key.ContainerType != null)
 				{
-					containerPrefix = this.Lingo.GetBasePrefix(context.Key.ContainerType).Suffix(".") + context.Key.ContainerType?.Name;
+					containerPrefix = this.Lingo.GetBasePrefix(context.Key.ContainerType, context.Key.ContainerType?.Name);
 				}
 
 				if(propertyPrefix.IsNullOrWhiteSpace())
 				{
-					propertyPrefix = $".Fields.{context.Key.Name}";
+					propertyPrefix = this.Lingo.FieldsPrefix.Suffix(".") + context.Key.Name;
 				}
 
-				prefix = $"{containerPrefix}{propertyPrefix}";
+				prefix = $"{containerPrefix.Suffix(".")}{propertyPrefix.UnPrefix(".")}";
 			}
 
 			var name = context.Key.Name.TrimToNull(context.Key.PropertyInfo?.Name ?? "")!;
 
 			var displayName = context.DisplayMetadata.DisplayName;
 			context.DisplayMetadata.DisplayName = () => this.GetMetaString("DisplayName", prefix, displayName?.Invoke() ?? "", name);
-				
+
 			var description = context.DisplayMetadata.Description;
 			context.DisplayMetadata.Description = () => this.GetMetaString("Description", prefix, description?.Invoke() ?? "", name);
 
@@ -112,7 +112,7 @@ public class DisplayMetadataProvider : IDisplayMetadataProvider
 
 
 	#region Protected Area
-		
+
 	protected Lingo Lingo;
 
 
@@ -126,7 +126,7 @@ public class DisplayMetadataProvider : IDisplayMetadataProvider
 
 		if(metaString.IsNullOrWhiteSpace())
 		{
-			metaString = i18n.Translate(prefix + type.Prefix("."), nullIfNotExists: true);
+			metaString = i18n.Translate(prefix.UnSuffix(".") + type.Prefix("."), nullIfNotExists: !this.Lingo.Debug);
 
 			if(metaString == null && (type == "DisplayName" || type.IsNullOrWhiteSpace()))
 			{
@@ -141,7 +141,7 @@ public class DisplayMetadataProvider : IDisplayMetadataProvider
 		return metaString ?? "";
 	}
 
-	private static String? GetDisplayName(FieldInfo field) =>  field.GetCustomAttribute<DisplayAttribute>(inherit: false)?.GetName();
+	private static String? GetDisplayName(FieldInfo field) => field.GetCustomAttribute<DisplayAttribute>(inherit: false)?.GetName();
 
 	private static String GetDisplayGroup(FieldInfo field) => field.GetCustomAttribute<DisplayAttribute>(inherit: false)?.GetGroupName() ?? String.Empty;
 

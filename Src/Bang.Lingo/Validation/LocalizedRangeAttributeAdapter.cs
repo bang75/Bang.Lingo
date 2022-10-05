@@ -11,7 +11,7 @@ namespace Bang.Lingo.Validation;
 
 public class LocalizedRangeAttributeAdapter : LocalizedAttributeAdapter<RangeAttribute>
 {
-	public LocalizedRangeAttributeAdapter(RangeAttribute attribute, IStringLocalizer? stringLocalizer) : base(attribute, stringLocalizer!)
+	public LocalizedRangeAttributeAdapter(RangeAttribute attribute, IStringLocalizer? stringLocalizer) : base(attribute, stringLocalizer)
 	{
 		this.Minimum = Convert.ToString(Attribute.Minimum, CultureInfo.InvariantCulture) ?? "";
 		this.Maximum = Convert.ToString(Attribute.Maximum, CultureInfo.InvariantCulture) ?? "";
@@ -38,6 +38,8 @@ public class LocalizedRangeAttributeAdapter : LocalizedAttributeAdapter<RangeAtt
 
 		return String.Format(message, displayName, this.Minimum, this.Maximum);
 	}
+
+
 
 	#region Protected Area
 

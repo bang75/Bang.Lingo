@@ -50,11 +50,18 @@ public partial class MetadataTests
 		
 		var options = new LingoOptions();
 
-        options.BasePrefixes.Add(typeof(BaseModel), "BaseModels");
-        options.BasePrefixes.Add(typeof(Test1Model), ".TestModels");
+        options.AddBasePrefix(typeof(BaseModel), (type) => "BaseModels.");
+        options.AddBasePrefix(typeof(Test1Model), "BaseModels.TestModels");
 
         var lingo = this.CreateLingo(options);
-		var metadata = this.GetMetadataForType<Test1Model>(lingo);
+
+
+		var metadata = this.GetMetadataForType<BaseModel>(lingo);
+
+		Assert.AreEqual("Basmodel", metadata.DisplayName);
+
+
+		metadata = this.GetMetadataForType<Test1Model>(lingo);
 
 		Assert.AreEqual("Testmodel 1", metadata.DisplayName);
 
@@ -66,6 +73,7 @@ public partial class MetadataTests
 
         Assert.AreEqual("Namn", idName?.DisplayName);
         Assert.AreEqual("Objektets namn.", idName?.Description);
+
 	}
 
 

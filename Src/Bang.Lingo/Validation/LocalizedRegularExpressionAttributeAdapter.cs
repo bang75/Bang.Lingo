@@ -9,7 +9,7 @@ namespace Bang.Lingo.Validation;
 
 public class LocalizedRegularExpressionAttributeAdapter : LocalizedAttributeAdapter<RegularExpressionAttribute>
 {
-	public LocalizedRegularExpressionAttributeAdapter(RegularExpressionAttribute attribute, IStringLocalizer? stringLocalizer) : base(attribute, stringLocalizer!)
+	public LocalizedRegularExpressionAttributeAdapter(RegularExpressionAttribute attribute, IStringLocalizer? stringLocalizer) : base(attribute, stringLocalizer)
 	{
 	}
 

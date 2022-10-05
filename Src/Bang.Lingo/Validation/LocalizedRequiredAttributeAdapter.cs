@@ -10,7 +10,7 @@ namespace Bang.Lingo.Validation;
 
 public class LocalizedRequiredAttributeAdapter : LocalizedAttributeAdapter<RequiredAttribute>
 {
-	public LocalizedRequiredAttributeAdapter(RequiredAttribute attribute, IStringLocalizer? stringLocalizer) : base(attribute, stringLocalizer!)
+	public LocalizedRequiredAttributeAdapter(RequiredAttribute attribute, IStringLocalizer? stringLocalizer) : base(attribute, stringLocalizer)
 	{
 	}
 

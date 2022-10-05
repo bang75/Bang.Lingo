@@ -16,7 +16,7 @@ namespace Bang.Lingo.Validation;
 public abstract class LocalizedAttributeAdapter<T> : AttributeAdapterBase<T>, ILocalizedAttributeAdapter where T : ValidationAttribute
 {
 	// Constructors
-	public LocalizedAttributeAdapter(T attribute, IStringLocalizer stringLocalizer) : base(attribute, stringLocalizer)
+	public LocalizedAttributeAdapter(T attribute, IStringLocalizer? stringLocalizer) : base(attribute, stringLocalizer)
 	{
 		var validationAttrType = typeof(ValidationAttribute);
 

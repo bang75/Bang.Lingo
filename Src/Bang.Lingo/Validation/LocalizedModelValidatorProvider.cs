@@ -9,30 +9,30 @@ namespace Bang.Lingo.Validation;
 
 public class LocalizedModelValidatorProvider : IModelValidatorProvider
 {
-    // Constructors
-    public LocalizedModelValidatorProvider(IValidationAttributeAdapterProvider validationAttributeAdapterProvider)
-    {
-        ValidationAttributeAdapterProvider = validationAttributeAdapterProvider;
-    }
+	// Constructors
+	public LocalizedModelValidatorProvider(IValidationAttributeAdapterProvider validationAttributeAdapterProvider)
+	{
+		ValidationAttributeAdapterProvider = validationAttributeAdapterProvider;
+	}
 
 
-    // Methods
-    public void CreateValidators(ModelValidatorProviderContext context)
-    {
-        foreach (var validatorItem in context.Results)
-        {
-            if (validatorItem.Validator != null && validatorItem.ValidatorMetadata is ValidationAttribute attr)
-            {
-                validatorItem.Validator = new LocalizedModelValidator(attr, validatorItem.Validator, ValidationAttributeAdapterProvider);
-            }
-        }
-    }
+	// Methods
+	public void CreateValidators(ModelValidatorProviderContext context)
+	{
+		foreach(var validatorItem in context.Results)
+		{
+			if(validatorItem.Validator != null && validatorItem.ValidatorMetadata is ValidationAttribute attr)
+			{
+				validatorItem.Validator = new LocalizedModelValidator(attr, validatorItem.Validator, ValidationAttributeAdapterProvider);
+			}
+		}
+	}
 
 
-    #region Protected Area
+	#region Protected Area
 
-    private readonly IValidationAttributeAdapterProvider ValidationAttributeAdapterProvider;
+	private readonly IValidationAttributeAdapterProvider ValidationAttributeAdapterProvider;
 
-    #endregion
+	#endregion
 
 }

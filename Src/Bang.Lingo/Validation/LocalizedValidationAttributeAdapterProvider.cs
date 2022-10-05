@@ -10,8 +10,6 @@ namespace Bang.Lingo.Validation;
 
 public class LocalizedValidationAttributeAdapterProvider : IValidationAttributeAdapterProvider
 {
-    private IValidationAttributeAdapterProvider innerProvider = new ValidationAttributeAdapterProvider();
-
     public IAttributeAdapter? GetAttributeAdapter(ValidationAttribute? attribute, IStringLocalizer? stringLocalizer)
     {
         if (attribute == null)
@@ -30,11 +28,11 @@ public class LocalizedValidationAttributeAdapterProvider : IValidationAttributeA
             case RangeAttribute rangeAttribute:
                 return new LocalizedRangeAttributeAdapter(rangeAttribute, stringLocalizer);
 
-            //case MinLengthAttribute minLengthAttribute:
-            //	return new LocalizedMinLengthAttributeAdapter(minLengthAttribute, stringLocalizer);
+            case MinLengthAttribute minLengthAttribute:
+            	return new LocalizedMinLengthAttributeAdapter(minLengthAttribute, stringLocalizer);
 
-            //case MaxLengthAttribute maxLengthAttribute:
-            //	return new LocalizedMaxLengthAttributeAdapter(maxLengthAttribute, stringLocalizer);
+            case MaxLengthAttribute maxLengthAttribute:
+            	return new LocalizedMaxLengthAttributeAdapter(maxLengthAttribute, stringLocalizer);
 
             case EmailAddressAttribute emailAttribute:
                 return new LocalizedEmailAddressAttributeAdapter(emailAttribute, stringLocalizer);
@@ -45,4 +43,13 @@ public class LocalizedValidationAttributeAdapterProvider : IValidationAttributeA
 
         return innerProvider.GetAttributeAdapter(attribute, stringLocalizer);
     }
+
+
+
+	#region Protected Area
+
+	private IValidationAttributeAdapterProvider innerProvider = new ValidationAttributeAdapterProvider();
+
+	#endregion
+
 }

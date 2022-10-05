@@ -16,6 +16,8 @@
 	</Unik>
 
 	<BaseModels>
+		<DisplayName>Basmodel</DisplayName>
+
 		<TestModels>
 			<Test1Model>
 				<DisplayName>Testmodel 1</DisplayName>

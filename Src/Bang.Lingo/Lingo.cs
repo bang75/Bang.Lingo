@@ -9,11 +9,19 @@ namespace Bang.Lingo;
 
 public class Lingo
 {
+	// Properties
+	public readonly Boolean Debug;
+
+	public readonly String FieldsPrefix = "Fields";
+
+
 	// Constructors
 	public Lingo(LingoOptions? options = null)
 	{
 		options = options ?? new LingoOptions();
 
+		this.Debug = options.Debug;
+		this.FieldsPrefix = options.FieldsPrefix;
 		this.MissingItemText = options.MissingItemText;
 		this.BasePrefixes = options.BasePrefixes;
 		this.Parameters = options.Parameters;
@@ -37,27 +45,33 @@ public class Lingo
 		}
 	}
 
-	public String? GetBasePrefix(Type? type)
+	public String? GetBasePrefix(Type? type, String? name)
 	{
 		String? prefix = null;
 
-		while(type != null)
-		{
-			if(this.BasePrefixes.TryGetValue(type, out var typePrefix))
-			{
-				prefix = typePrefix + prefix;
+		var baseType = type;
 
-				if(!prefix.IsPrefixed("."))
-				{
-					break;
-				}
+		while(baseType != null)
+		{
+			if(this.BasePrefixes.TryGetValue(baseType, out var typePrefix))
+			{
+				prefix = typePrefix(type!);
+				break;
 			}
 
-			type = type.BaseType;
+			baseType = baseType.BaseType;
+		}
+
+		if(prefix.IsNullOrWhiteSpace() || !prefix.IsSuffixed("."))
+		{
+			prefix = prefix.Suffix(".") + name;
 		}
 
 		return prefix;
 	}
+
+	public String? GetBasePrefix<T>(String? name) => this.GetBasePrefix(typeof(T), name);
+
 
 	public TranslationDictionary GetDictionary(String? language = null)
 	{
@@ -122,7 +136,7 @@ public class Lingo
 	// Properties
 	protected readonly String MissingItemText;
 
-	protected readonly Dictionary<Type, String> BasePrefixes;
+	protected readonly Dictionary<Type, Func<Type, String?>> BasePrefixes;
 
 	protected readonly Dictionary<String, Func<String, String, String>> Parameters;
 
