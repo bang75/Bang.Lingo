@@ -5,6 +5,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -14,11 +15,15 @@ public static class ApplicationBuilderExtensions
 {
 	public static IApplicationBuilder UseLingo(this IApplicationBuilder app)
 	{
-		if(app.ApplicationServices.GetService<Lingo>() == null)
+		var lingo = app.ApplicationServices.GetService<Lingo>();
+
+		if(lingo == null)
 		{
 			throw new InvalidOperationException(
 				"Unable to find the required services. Please add all the required services by calling 'IServiceCollection.AddLingo' in the application startup code.");
 		}
+
+		lingo.Load();
 
 		var lingoOptions = app.ApplicationServices.GetService<IOptions<LingoOptions>>();
 

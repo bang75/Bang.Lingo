@@ -2,6 +2,7 @@
 
 using System.Xml;
 using System.Reflection;
+using Microsoft.Extensions.FileProviders;
 
 namespace Monotype.Lingo.Extensions;
 
@@ -35,6 +36,61 @@ public static class LingoOptionsExtensions
 		};
 	}
 
+	public static void AddTranslationXml(this LingoOptions options, IFileProvider fileProvider,  String path, Boolean throwIfNotExists = true)
+	{
+		options.LoadTranslations += lingo =>
+		{
+			void loadXmlFile(IFileInfo fileInfo)
+			{
+				using var fileStream = fileInfo.CreateReadStream();
+
+				LoadXml(lingo, fileStream);
+			};
+
+			Int32 loadXmlDirectory(String folderPath, Int32 noOfFiles = 0)
+			{
+				foreach(var fileInfo in fileProvider.GetDirectoryContents(folderPath))
+				{
+					if(fileInfo.IsDirectory)
+					{
+						noOfFiles += loadXmlDirectory(folderPath.UnSuffix("/") + fileInfo.Name.Prefix("/"));
+					}
+					else
+					{
+						noOfFiles++;
+						loadXmlFile(fileInfo);
+					}
+				}
+
+				return noOfFiles;
+			};
+
+			if(path.IsSuffixed(".xml"))
+			{
+				var fileInfo = fileProvider.GetFileInfo(path);
+
+				if(fileInfo.Exists)
+				{
+					loadXmlFile(fileInfo);
+					return;
+				}
+			}
+			else
+			{
+				if(loadXmlDirectory(path) > 0)
+				{
+					return;
+				}
+			}
+
+			if(throwIfNotExists)
+			{
+				throw new ArgumentException($"Could not find path '{path}'");
+			}
+		};
+	}
+
+
 	public static void AddTranslationXml(this LingoOptions options, Assembly assembly, String path, Boolean throwIfNotExists = true)
 	{
 		options.LoadTranslations += lingo =>
@@ -45,7 +101,15 @@ public static class LingoOptionsExtensions
 
 			if(resPattern.StartsWith('.'))
 			{
-				resPattern = $"{assembly.GetName().Name}{resPattern}";
+				var rootNs = assembly.ExportedTypes
+					.Select(t => t.Namespace?.Split(".").FirstOrDefault())
+					.Where(t => t != null)
+					.GroupBy(ns => ns)
+					.OrderByDescending(g => g.Count())
+					.FirstOrDefault()?
+					.Key;
+
+				resPattern = $"{rootNs}{resPattern}";
 			}
 
 			if(!resPattern.EndsWith(".xml", strComp))

@@ -14,36 +14,26 @@ namespace Monotype.Lingo.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-	public static IServiceCollection AddLingo(this IServiceCollection services, Action<Lingo>? setup = null)
-	{
-		return services.AddLingo(config: null, setup);
-	}
-
-	public static IServiceCollection AddLingo(this IServiceCollection services, Action<LingoOptions>? config, Action<Lingo>? setup = null)
+	public static IServiceCollection AddLingo(this IServiceCollection services, Action<LingoOptions>? config = null)
 	{
 		services.AddSingleton<IValidationAttributeAdapterProvider, LocalizedValidationAttributeAdapterProvider>();
 
 		services.AddHttpContextAccessor();
 
+		services.AddSingleton<IConfigureOptions<MvcOptions>, ConfigureMvcOptions>();
+
+
+		// Lingo Options
+		services.AddSingleton<IConfigureOptions<LingoOptions>, ConfigureLingoOptions>();
+
 		if(config != null)
 		{
 			services.Configure(config);
 		}
-
-		services.AddSingleton<IConfigureOptions<MvcOptions>, ConfigureMvcOptions>();
-			
-		services.AddSingleton(sp =>
-		{
-			var lingo = new Lingo();
-
-			setup?.Invoke(lingo);
-
-			lingo.Load();
-
-			return lingo;
-		});
+		services.AddSingleton((sp) => new Lingo(sp.GetRequiredService<IOptions<LingoOptions>>()));
 
 
+		// Register default translator
 		services.AddTransient(sp =>
 		{
 			var prefix = sp.GetService<IHttpContextAccessor>()?.HttpContext?.Items["Lingo.Prefix"] as String;

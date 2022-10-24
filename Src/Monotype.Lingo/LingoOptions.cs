@@ -41,5 +41,10 @@ public class LingoOptions
 	public void AddBasePrefix<T>(Func<Type, String?> prefix) => this.AddBasePrefix(typeof(T), prefix);
 
 
-	public Action<Lingo>? GetLoadTranslations() => this.LoadTranslations;
+
+	#region Protected Area
+
+	internal Action<Lingo>? GetLoadTranslations() => this.LoadTranslations;
+
+	#endregion
 }
