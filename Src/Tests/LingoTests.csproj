@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Bang.Lingo\Bang.Lingo.csproj" />
+    <ProjectReference Include="..\Bang.Lingo\Monotype.Lingo.csproj" />
   </ItemGroup>
 
   <ItemGroup>

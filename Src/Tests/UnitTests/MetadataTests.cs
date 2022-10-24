@@ -3,8 +3,8 @@ using System.Globalization;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
-using Bang.Lingo;
-using Bang.Lingo.Extensions;
+using Monotype.Lingo;
+using Monotype.Lingo.Extensions;
 
 using LingoTests.Models;
 

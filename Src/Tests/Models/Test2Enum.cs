@@ -1,4 +1,4 @@
-﻿using Bang.Lingo;
+﻿using Monotype.Lingo;
 
 namespace LingoTests.Models;
 

@@ -1,5 +1,5 @@
-using Bang.Lingo;
-using Bang.Lingo.Extensions;
+using Monotype.Lingo;
+using Monotype.Lingo.Extensions;
 
 namespace LingoTests.UnitTests;
 
