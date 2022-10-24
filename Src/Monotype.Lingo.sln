@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monotype.Extensions", "..\..\Bang.Extensions\Src\Monotype.Extensions.csproj", "{046D1243-CE1E-4FD1-96AD-ABB90EDB10C8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LingoTests", "Tests\LingoTests.csproj", "{0370F5E8-9801-4CA5-A95B-D27346C82931}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monotype.Lingo", "Bang.Lingo\Monotype.Lingo.csproj", "{8A1C083F-BD74-488F-9E35-11A7C40B2AB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monotype.Lingo", "Monotype.Lingo\Monotype.Lingo.csproj", "{471AFED7-48F7-442A-A428-DDD75C9FC3B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7F08C40E-4BB9-4ED3-A707-8EE719AE2984}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monotype.Extensions", "..\..\Monotype.Extensions\Src\Monotype.Extensions\Monotype.Extensions.csproj", "{F65202D6-4604-40A2-A726-113BBC9882F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,21 +17,24 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{046D1243-CE1E-4FD1-96AD-ABB90EDB10C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{046D1243-CE1E-4FD1-96AD-ABB90EDB10C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{046D1243-CE1E-4FD1-96AD-ABB90EDB10C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{046D1243-CE1E-4FD1-96AD-ABB90EDB10C8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0370F5E8-9801-4CA5-A95B-D27346C82931}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0370F5E8-9801-4CA5-A95B-D27346C82931}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0370F5E8-9801-4CA5-A95B-D27346C82931}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0370F5E8-9801-4CA5-A95B-D27346C82931}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8A1C083F-BD74-488F-9E35-11A7C40B2AB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A1C083F-BD74-488F-9E35-11A7C40B2AB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8A1C083F-BD74-488F-9E35-11A7C40B2AB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8A1C083F-BD74-488F-9E35-11A7C40B2AB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{471AFED7-48F7-442A-A428-DDD75C9FC3B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{471AFED7-48F7-442A-A428-DDD75C9FC3B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{471AFED7-48F7-442A-A428-DDD75C9FC3B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{471AFED7-48F7-442A-A428-DDD75C9FC3B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F65202D6-4604-40A2-A726-113BBC9882F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F65202D6-4604-40A2-A726-113BBC9882F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F65202D6-4604-40A2-A726-113BBC9882F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F65202D6-4604-40A2-A726-113BBC9882F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0370F5E8-9801-4CA5-A95B-D27346C82931} = {7F08C40E-4BB9-4ED3-A707-8EE719AE2984}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5AC2D3A0-F355-4773-8BE6-8399A106B561}
