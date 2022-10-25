@@ -29,11 +29,11 @@ public partial class MetadataTests
 		return lingo;
 	}
 
-	public ModelMetadata GetMetadataForType<T>(Lingo lingo)
+	public ModelMetadata GetMetadataForType<T>(Lingo lingo, MissingTranslationMode missingTranslationMode = MissingTranslationMode.AsReadable)
 	{
 		var detailsProviders = new IMetadataDetailsProvider[]
 		{
-			new DisplayMetadataProvider(lingo)
+			new DisplayMetadataProvider(lingo, missingTranslationMode)
 		};
 
 		var provider = new DefaultModelMetadataProvider(new CompositeMetadataDetailsProvider(detailsProviders));

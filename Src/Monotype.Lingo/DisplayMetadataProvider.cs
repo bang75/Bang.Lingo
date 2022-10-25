@@ -7,15 +7,17 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
+using Microsoft.Extensions.Options;
 
 namespace Monotype.Lingo;
 
 public class DisplayMetadataProvider : IDisplayMetadataProvider
 {
 	// Constructor
-	public DisplayMetadataProvider(Lingo lingo)
+	public DisplayMetadataProvider(Lingo lingo, MissingTranslationMode missingTranslationMode)
 	{
 		this.Lingo = lingo;
+		this.MissingTranslationMode = missingTranslationMode;
 	}
 
 
@@ -113,7 +115,8 @@ public class DisplayMetadataProvider : IDisplayMetadataProvider
 
 	#region Protected Area
 
-	protected Lingo Lingo;
+	protected readonly Lingo Lingo;
+	protected readonly MissingTranslationMode MissingTranslationMode;
 
 
 	// Methods
@@ -126,9 +129,9 @@ public class DisplayMetadataProvider : IDisplayMetadataProvider
 
 		if(metaString.IsNullOrWhiteSpace())
 		{
-			metaString = i18n.Translate(prefix.UnSuffix(".") + type.Prefix("."), nullIfNotExists: !this.Lingo.Debug);
+			metaString = i18n.Translate(prefix.UnSuffix(".") + type.Prefix("."), nullIfNotExists: this.MissingTranslationMode != MissingTranslationMode.AsError);
 
-			if(metaString == null && (type == "DisplayName" || type.IsNullOrWhiteSpace()))
+			if(metaString == null && this.MissingTranslationMode == MissingTranslationMode.AsReadable && (type == "DisplayName" || type.IsNullOrWhiteSpace()))
 			{
 				metaString = name.ToReadable();
 			}

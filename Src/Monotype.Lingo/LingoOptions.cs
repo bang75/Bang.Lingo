@@ -2,6 +2,16 @@
 
 namespace Monotype.Lingo;
 
+public enum MissingTranslationMode
+{
+	Undefined = 0,
+
+	AsName = 1,
+	AsReadable = 2,
+	AsError = 3
+}
+
+
 public class LingoOptions
 {
 	public Boolean Debug { get; set; }
@@ -11,6 +21,8 @@ public class LingoOptions
 	public String FieldsPrefix { get; set; } = "Fields";
 
 	public String MissingItemText { get; set; } = "[{language}] #{key}";
+
+	public MissingTranslationMode MissingTranslationMode { get; set; } = MissingTranslationMode.AsReadable;
 
 	public Dictionary<String, Func<String, String, String>> Parameters { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 

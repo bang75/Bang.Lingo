@@ -12,9 +12,10 @@ namespace Monotype.Lingo;
 internal class ConfigureMvcOptions : IConfigureOptions<MvcOptions>
 {
 	// Constructors
-	public ConfigureMvcOptions(Lingo lingo, IValidationAttributeAdapterProvider validationAttributeAdapterProvider)
+	public ConfigureMvcOptions(Lingo lingo, IOptions<LingoOptions> options, IValidationAttributeAdapterProvider validationAttributeAdapterProvider)
 	{
 		this.Lingo = lingo;
+		this.Options = options.Value;
 		this.ValidationAttributeAdapterProvider = validationAttributeAdapterProvider;
 	}
 
@@ -23,7 +24,7 @@ internal class ConfigureMvcOptions : IConfigureOptions<MvcOptions>
 		options.Filters.Add(new LingoFilter());
 
 		// Display Localization
-		options.ModelMetadataDetailsProviders.Add(new DisplayMetadataProvider(this.Lingo));
+		options.ModelMetadataDetailsProviders.Add(new DisplayMetadataProvider(this.Lingo, this.Options.MissingTranslationMode));
 
 		// Validator Providers
 		options.ModelValidatorProviders.Add(new LocalizedModelValidatorProvider(this.ValidationAttributeAdapterProvider));
@@ -34,6 +35,7 @@ internal class ConfigureMvcOptions : IConfigureOptions<MvcOptions>
 	#region Protected Area
 
 	private readonly Lingo Lingo;
+	private readonly LingoOptions Options;
 	private readonly IValidationAttributeAdapterProvider ValidationAttributeAdapterProvider;
 
 	#endregion
