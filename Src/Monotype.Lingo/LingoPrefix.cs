@@ -1,6 +1,6 @@
 ﻿#nullable enable
 
-namespace Monotype.Lingo;
+namespace Monotype.Localization;
 
 [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Enum | AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
 public class LingoPrefixAttribute : Attribute

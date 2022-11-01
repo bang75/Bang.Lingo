@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
-namespace Monotype.Lingo.Validation;
+namespace Monotype.Localization.Validation;
 
 // Bara för backend validering
 public class LocalizedModelValidator : IModelValidator

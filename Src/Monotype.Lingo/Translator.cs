@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Html;
 
-namespace Monotype.Lingo;
+namespace Monotype.Localization;
 
 public class Translator
 {

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 using System.Collections.Immutable;
 
-namespace Monotype.Lingo;
+namespace Monotype.Localization;
 
 public class Lingo
 {

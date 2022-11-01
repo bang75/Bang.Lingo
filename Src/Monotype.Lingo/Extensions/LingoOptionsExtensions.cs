@@ -4,7 +4,7 @@ using System.Xml;
 using System.Reflection;
 using Microsoft.Extensions.FileProviders;
 
-namespace Monotype.Lingo.Extensions;
+namespace Monotype.Localization.Extensions;
 
 public static class LingoOptionsExtensions
 {

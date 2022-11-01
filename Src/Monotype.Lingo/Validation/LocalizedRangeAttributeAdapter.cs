@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 using Microsoft.Extensions.Localization;
 
-namespace Monotype.Lingo.Validation;
+namespace Monotype.Localization.Validation;
 
 public class LocalizedRangeAttributeAdapter : LocalizedAttributeAdapter<RangeAttribute>
 {

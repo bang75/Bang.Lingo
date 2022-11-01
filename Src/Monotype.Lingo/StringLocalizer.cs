@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 using Microsoft.Extensions.Localization;
 
-namespace Monotype.Lingo
+namespace Monotype.Localization
 {
     public class StringLocalizer : IStringLocalizer
     {

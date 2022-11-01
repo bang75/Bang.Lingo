@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 
-using Monotype.Lingo.Validation;
+using Monotype.Localization.Validation;
 
-namespace Monotype.Lingo.Extensions;
+namespace Monotype.Localization.Extensions;
 
 public static class ServiceCollectionExtensions
 {

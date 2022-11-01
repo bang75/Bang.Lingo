@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc.DataAnnotations;
 
 using Microsoft.Extensions.Options;
 
-using Monotype.Lingo.Validation;
+using Monotype.Localization.Validation;
 
-namespace Monotype.Lingo;
+namespace Monotype.Localization;
 
 internal class ConfigureMvcOptions : IConfigureOptions<MvcOptions>
 {

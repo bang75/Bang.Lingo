@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Hosting;
 
 using Microsoft.Extensions.Options;
 
-using Monotype.Lingo.Extensions;
+using Monotype.Localization.Extensions;
 
-namespace Monotype.Lingo;
+namespace Monotype.Localization;
 
 internal class ConfigureLingoOptions : IConfigureOptions<LingoOptions>
 {
@@ -24,18 +24,18 @@ internal class ConfigureLingoOptions : IConfigureOptions<LingoOptions>
 
 		if(entryAssembly != null)
 		{
-			options.AddTranslationXml(entryAssembly, "/I18n", throwIfNotExists: false);
+			options.AddTranslationXml(entryAssembly, "/Lingo", throwIfNotExists: false);
 		}
 
 		if(this.HostEnv?.ContentRootPath.IsNullOrWhiteSpace() == false)
 		{
 			if(this.HostEnv?.ContentRootFileProvider != null)
 			{
-				options.AddTranslationXml(this.HostEnv.ContentRootFileProvider, "I18n", throwIfNotExists: false);
+				options.AddTranslationXml(this.HostEnv.ContentRootFileProvider, "Lingo", throwIfNotExists: false);
 			}
 			else
 			{
-				options.AddTranslationXml(Path.Combine(this.HostEnv!.ContentRootPath, "I18n"), throwIfNotExists: false);
+				options.AddTranslationXml(Path.Combine(this.HostEnv!.ContentRootPath, "Lingo"), throwIfNotExists: false);
 			}
 		}
 	}

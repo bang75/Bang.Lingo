@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Monotype.Lingo.Validation;
+namespace Monotype.Localization.Validation;
 
 // Bara för klientvalidering / unobtrusive
 public abstract class LocalizedAttributeAdapter<T> : AttributeAdapterBase<T>, ILocalizedAttributeAdapter where T : ValidationAttribute

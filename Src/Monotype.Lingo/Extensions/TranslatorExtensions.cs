@@ -1,6 +1,6 @@
 ﻿#nullable enable
 
-namespace Monotype.Lingo.Extensions;
+namespace Monotype.Localization.Extensions;
 
 public static class TranslatorExtensions
 {

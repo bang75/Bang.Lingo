@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Monotype.Lingo.Extensions;
+namespace Monotype.Localization.Extensions;
 
 public static class ApplicationBuilderExtensions
 {

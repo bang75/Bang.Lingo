@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Controllers;
 
-namespace Monotype.Lingo;
+namespace Monotype.Localization;
 
 public class LingoFilter : IAsyncActionFilter, IAsyncPageFilter
 {

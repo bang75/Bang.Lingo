@@ -1,6 +1,6 @@
 ﻿#nullable enable
 
-namespace Monotype.Lingo;
+namespace Monotype.Localization;
 
 public class TranslationEntry
 {

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.DataAnnotations;
 
 using Microsoft.Extensions.Localization;
 
-namespace Monotype.Lingo.Validation;
+namespace Monotype.Localization.Validation;
 
 public class LocalizedValidationAttributeAdapterProvider : IValidationAttributeAdapterProvider
 {

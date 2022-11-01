@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
-namespace Monotype.Lingo.Validation;
+namespace Monotype.Localization.Validation;
 
 public interface ILocalizedAttributeAdapter
 {

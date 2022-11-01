@@ -4,7 +4,7 @@ using System.Collections.Immutable;
 
 using Markdig;
 
-namespace Monotype.Lingo;
+namespace Monotype.Localization;
 
 public class TranslationDictionary
 {

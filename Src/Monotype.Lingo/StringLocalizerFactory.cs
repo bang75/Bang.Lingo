@@ -2,7 +2,7 @@
 
 using Microsoft.Extensions.Localization;
 
-namespace Monotype.Lingo
+namespace Monotype.Localization
 {
     public class StringLocalizerFactory : IStringLocalizerFactory
     {

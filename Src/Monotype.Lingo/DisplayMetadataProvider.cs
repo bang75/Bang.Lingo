@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.Options;
 
-namespace Monotype.Lingo;
+namespace Monotype.Localization;
 
 public class DisplayMetadataProvider : IDisplayMetadataProvider
 {
