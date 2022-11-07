@@ -27,7 +27,7 @@ public static class ApplicationBuilderExtensions
 
 		var lingoOptions = app.ApplicationServices.GetService<IOptions<LingoOptions>>();
 
-		if(lingoOptions?.Value?.MapEndPoints == true && app is IEndpointRouteBuilder endPoints)
+		if(lingoOptions?.Value?.MapEndPoints == true)
 		{
 			var getTranslations = (String? language, String? prefix, Lingo lingo) =>
 			{
@@ -39,8 +39,12 @@ public static class ApplicationBuilderExtensions
 				return Results.Content($"/* Lingo. Language: {translator.Language}. Prefix: {prefix} */\nvar i18n = i18n || []; i18n = Object.assign({{}}, i18n || {{}}, {json});", "text/javascript");
 			};
 
-			endPoints.MapGet("/js/i18n.js", getTranslations);
-			endPoints.MapGet("/js/i18n.{language}.js", getTranslations);
+			app.UseEndpoints(config =>
+			{
+				config.MapGet("/js/i18n.js", getTranslations);
+				config.MapGet("/js/i18n.{language}.js", getTranslations);
+			});
+
 		}
 
 		return app;
