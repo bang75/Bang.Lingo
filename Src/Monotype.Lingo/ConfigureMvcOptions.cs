@@ -21,7 +21,7 @@ internal class ConfigureMvcOptions : IConfigureOptions<MvcOptions>
 
 	public void Configure(MvcOptions options)
 	{
-		options.Filters.Add(new LingoFilter());
+		options.Filters.Add(new LingoFilter(this.Lingo));
 
 		// Display Localization
 		options.ModelMetadataDetailsProviders.Add(new DisplayMetadataProvider(this.Lingo, this.Options.MissingTranslationMode));

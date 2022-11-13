@@ -7,7 +7,6 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
-using Microsoft.Extensions.Options;
 
 namespace Monotype.Localization;
 
@@ -129,7 +128,7 @@ public class DisplayMetadataProvider : IDisplayMetadataProvider
 
 		if(metaString.IsNullOrWhiteSpace())
 		{
-			metaString = i18n.Translate(prefix.UnSuffix(".") + type.Prefix("."), nullIfNotExists: this.MissingTranslationMode != MissingTranslationMode.AsError);
+			metaString = i18n.Translate(prefix.UnSuffix(".") + type.TrimToNull().Prefix("."), nullIfNotExists: this.MissingTranslationMode != MissingTranslationMode.AsError);
 
 			if(metaString == null && this.MissingTranslationMode == MissingTranslationMode.AsReadable && (type == "DisplayName" || type.IsNullOrWhiteSpace()))
 			{

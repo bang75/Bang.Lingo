@@ -1,4 +1,4 @@
-﻿using Monotype.Lingo;
+﻿using Monotype.Localization;
 
 namespace LingoTests.Models;
 

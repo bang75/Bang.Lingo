@@ -46,7 +46,7 @@ public class LingoOptions
 		this.BasePrefixes[type] = prefix;
 	}
 
-	public void AddBasePrefix(Type type, String prefix) => this.AddBasePrefix(type, (obj) => prefix);
+	public void AddBasePrefix(Type type, String prefix) => this.AddBasePrefix(type, (modelType) => prefix);
 
 	public void AddBasePrefix<T>(String prefix) => this.AddBasePrefix(typeof(T), prefix);
 

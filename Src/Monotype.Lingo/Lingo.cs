@@ -10,23 +10,20 @@ namespace Monotype.Localization;
 public class Lingo
 {
 	// Properties
-	public readonly Boolean Debug;
+	public Boolean Debug => this.Options.Debug;
 
-	public readonly String FieldsPrefix = "Fields";
+	public String FieldsPrefix => this.Options.FieldsPrefix;
 
 
 	// Constructors
 	public Lingo(LingoOptions? options = null)
 	{
-		options = options ?? new LingoOptions();
+		this.Options = options ?? new LingoOptions();
 
-		this.Debug = options.Debug;
-		this.FieldsPrefix = options.FieldsPrefix;
-		this.MissingItemText = options.MissingItemText;
-		this.BasePrefixes = options.BasePrefixes;
-		this.Parameters = options.Parameters;
+		this.BasePrefixes = this.Options.BasePrefixes;
+		this.Parameters = this.Options.Parameters;
 
-		this.LoadTranslations = options.GetLoadTranslations();
+		this.LoadTranslations = this.Options.GetLoadTranslations();
 	}
 
 	public Lingo(IOptions<LingoOptions> options) : this(options.Value)
@@ -45,7 +42,7 @@ public class Lingo
 		}
 	}
 
-	public String? GetBasePrefix(Type? type, String? name)
+	public String? GetBasePrefix(Type? type, String? name = null)
 	{
 		String? prefix = null;
 
@@ -99,13 +96,6 @@ public class Lingo
 		}
 	}
 
-	public Translator GetTranslator(HttpContext? httpContext, String? language = null)
-	{
-		var prefix = httpContext?.Items["Lingo.Prefix"] as String;
-
-		return this.GetTranslator(language, prefix);
-	}
-
 	public String? ParseParams(String? text, String language)
 	{
 		if(this.Parameters != null && text?.Contains('{') == true)
@@ -124,7 +114,7 @@ public class Lingo
 
 	public String GetMissingText(String language, String? key)
 	{
-		return this.MissingItemText
+		return this.Options.MissingItemText
 			.Replace("{language}", language, StringComparison.OrdinalIgnoreCase)
 			.Replace("{key}", key, StringComparison.OrdinalIgnoreCase);
 	}
@@ -134,7 +124,7 @@ public class Lingo
 	#region Protected Area
 
 	// Properties
-	protected readonly String MissingItemText;
+	protected readonly LingoOptions Options;
 
 	protected readonly Dictionary<Type, Func<Type, String?>> BasePrefixes;
 

@@ -1,5 +1,5 @@
-using Monotype.Lingo;
-using Monotype.Lingo.Extensions;
+using Monotype.Localization;
+using Monotype.Localization.Extensions;
 
 namespace LingoTests.UnitTests;
 

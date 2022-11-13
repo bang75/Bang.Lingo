@@ -36,9 +36,11 @@ public static class ServiceCollectionExtensions
 		// Register default translator
 		services.AddTransient(sp =>
 		{
-			var prefix = sp.GetService<IHttpContextAccessor>()?.HttpContext?.Items["Lingo.Prefix"] as String;
+			var prefix = sp.GetService<IHttpContextAccessor>()?
+				.HttpContext?.Items["Lingo.Prefix"] as String;
 
-			return sp.GetRequiredService<Lingo>().GetTranslator(Thread.CurrentThread.CurrentUICulture.Name, prefix);
+			return sp.GetRequiredService<Lingo>()
+				.GetTranslator(Thread.CurrentThread.CurrentUICulture.Name, prefix);
 		});
 
 		return services;

@@ -11,29 +11,67 @@ namespace Monotype.Localization;
 public class LingoFilter : IAsyncActionFilter, IAsyncPageFilter
 {
 	// Constructors
-	public LingoFilter()
+	public LingoFilter(Lingo lingo)
 	{
+		this.Lingo = lingo;
 	}
 
 
-	// Methods
+	// Methods - Controller
 	public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
 	{
 		if(context.Controller is Controller controller)
 		{
+			var controllerType = controller.GetType();
 			var actionDescriptor = (ControllerActionDescriptor)context.ActionDescriptor;
-			var lingoAttr = actionDescriptor?.MethodInfo.GetCustomAttribute<LingoPrefixAttribute>(true)
-				?? controller.GetType().GetCustomAttribute<LingoPrefixAttribute>(true);
 
-			if(lingoAttr != null)
+			var lingoCtrlAttr = controllerType.GetCustomAttribute<LingoPrefixAttribute>(true);
+
+			var prefix = "";
+
+			if(lingoCtrlAttr != null)
 			{
-				context.HttpContext.Items["Lingo.Prefix"] = lingoAttr?.Prefix;
+				prefix = lingoCtrlAttr.Prefix.TrimToNull();
+
+				if(prefix.IsNullOrWhiteSpace())
+				{
+					prefix = this.Lingo.GetBasePrefix(controllerType).UnSuffix(".");
+				}
+			}
+
+			if(actionDescriptor != null)
+			{
+				var lingoActionAttr = actionDescriptor.MethodInfo.GetCustomAttribute<LingoPrefixAttribute>(true);
+
+				if(lingoActionAttr != null || lingoCtrlAttr != null)
+				{
+					var actionPrefix = lingoActionAttr?.Prefix.TrimToNull();
+						
+					if(actionPrefix.IsNullOrWhiteSpace())
+					{
+						actionPrefix = actionDescriptor.MethodInfo.Name.UnSuffix("Async");
+
+						if(lingoCtrlAttr != null)
+						{
+							actionPrefix = actionPrefix.Prefix(".");
+						}
+					}
+
+					prefix = actionPrefix.IsPrefixed(".") ? prefix + actionPrefix : actionPrefix;
+				}
+			}
+
+			if(!prefix.IsNullOrWhiteSpace())
+			{
+				context.HttpContext.Items[$"Lingo.Prefix"] = prefix;
 			}
 		}
 
 		await next();
 	}
 
+
+	// Methods - Page
 	public async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
 	{
 		await next();
@@ -41,20 +79,41 @@ public class LingoFilter : IAsyncActionFilter, IAsyncPageFilter
 
 	public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
 	{
-		var lingoAttr = context.HandlerMethod?.MethodInfo?.GetCustomAttribute<LingoPrefixAttribute>(true);
+		var handlerType = context.HandlerInstance.GetType();
 
-		var prefix = lingoAttr?.Prefix;
-
-		if(prefix == null || prefix.IsPrefixed("."))
+		if(handlerType != null)
 		{
-			var handlerType = context.HandlerInstance.GetType();
+			var lingoModelAttr = handlerType.GetCustomAttribute<LingoPrefixAttribute>(true);
 
-			lingoAttr = handlerType.GetCustomAttribute<LingoPrefixAttribute>(true);
+			if(lingoModelAttr != null)
+			{
+				var prefix = lingoModelAttr.Prefix.TrimToNull();
 
-			prefix = (lingoAttr?.Prefix ?? handlerType.Name.UnSuffix("Model")) + prefix;
+				if(prefix.IsNullOrWhiteSpace())
+				{
+					prefix = this.Lingo.GetBasePrefix(handlerType).UnSuffix(".");
+				}
+
+				context.HttpContext.Items[$"Lingo.Prefix"] = prefix;
+			}
+
+			if(context.HandlerMethod != null)
+			{
+				var lingoHandlerAttr = context.HandlerMethod.MethodInfo.GetCustomAttribute<LingoPrefixAttribute>(true);
+
+				if(lingoHandlerAttr != null)
+				{
+					var prefix = lingoHandlerAttr.Prefix;
+
+					if(prefix.IsPrefixed("."))
+					{
+						prefix = (context.HttpContext.Items[$"Lingo.Prefix"] as String) + prefix;
+					}
+
+					context.HttpContext.Items[$"Lingo.Prefix"] = prefix;
+				}
+			}
 		}
-
-		context.HttpContext.Items["Lingo.Prefix"] = prefix;
 
 		return Task.CompletedTask;
 	}
@@ -62,6 +121,9 @@ public class LingoFilter : IAsyncActionFilter, IAsyncPageFilter
 
 
 	#region Protected Area
+
+	private readonly Lingo Lingo;
+
 	#endregion
 
 }
