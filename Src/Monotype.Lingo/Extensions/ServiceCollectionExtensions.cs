@@ -2,7 +2,6 @@
 
 using Microsoft.AspNetCore.Http;
 
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 
 using Microsoft.Extensions.Options;
@@ -20,17 +19,18 @@ public static class ServiceCollectionExtensions
 
 		services.AddHttpContextAccessor();
 
-		services.AddSingleton<IConfigureOptions<MvcOptions>, ConfigureMvcOptions>();
+		services.ConfigureOptions<ConfigureMvcOptions>();
 
 
 		// Lingo Options
-		services.AddSingleton<IConfigureOptions<LingoOptions>, ConfigureLingoOptions>();
+		services.ConfigureOptions<ConfigureLingoOptions>();
 
 		if(config != null)
 		{
 			services.Configure(config);
 		}
-		services.AddSingleton((sp) => new Lingo(sp.GetRequiredService<IOptions<LingoOptions>>()));
+
+		services.AddSingleton<Lingo>((sp) => new Lingo(sp.GetRequiredService<IOptions<LingoOptions>>()));
 
 
 		// Register default translator
