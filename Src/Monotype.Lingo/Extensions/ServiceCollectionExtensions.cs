@@ -35,7 +35,7 @@ public static class ServiceCollectionExtensions
 
 		// Register default translator
 		services.AddTransient(sp =>
-		{
+		 {
 			var prefix = sp.GetService<IHttpContextAccessor>()?
 				.HttpContext?.Items["Lingo.Prefix"] as String;
 
