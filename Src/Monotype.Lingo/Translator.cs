@@ -34,6 +34,13 @@ public class Translator
 
 
 	// Methods
+	public Translator Prefixed(String? prefix)
+	{
+		this.Prefix = prefix;
+
+		return this;
+	}
+
 	public Boolean ContainsKey(String? key)
 	{
 		key = key.UnPrefix("#");
